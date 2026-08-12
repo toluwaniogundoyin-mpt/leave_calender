@@ -9,9 +9,21 @@ GITHUB_REPO = "leave-calender"
 GITHUB_BRANCH = "main"
 LEAVES_PATH = "data/leaves.yaml"
 
+[observability]
+enabled = false
+head_sampling_rate = 1
+
 [observability.logs]
 enabled = true
+head_sampling_rate = 1
+persist = true
 invocation_logs = true
+
+[observability.traces]
+enabled = true
+persist = true
+head_sampling_rate = 1
+
 
 # Secrets (set via `wrangler secret put <NAME>`, never committed):
 #   SLACK_SIGNING_SECRET  — from the Slack app's Basic Information page
