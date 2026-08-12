@@ -2,8 +2,8 @@ import yaml from "js-yaml";
 
 const USAGE =
   "Usage:\n" +
-  "`/leave add @user YYYY-MM-DD YYYY-MM-DD [note]` — add a leave record\n" +
-  "`/leave check` — list current + upcoming leave (next 30 days)";
+  "`/leaves add @user YYYY-MM-DD YYYY-MM-DD [note]` — add a leave record\n" +
+  "`/leaves check` — list current + upcoming leave for the whole team (next 30 days)";
 
 const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
 const MENTION_RE = /^<@([A-Z0-9]+)(\|[^>]+)?>$/i;
