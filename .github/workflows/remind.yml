@@ -1,0 +1,46 @@
+name: Leave reminders
+
+on:
+  workflow_dispatch:               # triggered daily by cron-job.org (and manual runs)
+
+permissions:
+  contents: write                  # so the run can commit the notified.json latch back to the repo
+
+jobs:
+  send-reminders:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    # Avoid two runs racing on the state file if one overruns.
+    concurrency:
+      group: leave-reminders
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install deps
+        run: pip install -r notify/requirements.txt
+
+      - name: Send due reminders
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          REMINDER_DAYS_BEFORE: "3"
+        run: python notify/remind.py
+
+      # Persist the notified-reminders latch. Only commits when it actually
+      # changed, so history stays quiet on days with nothing to send.
+      - name: Persist notification latch
+        if: always()
+        run: |
+          if [[ -n "$(git status --porcelain data/notified.json)" ]]; then
+            git config user.name "leave-notifier-bot"
+            git config user.email "actions@users.noreply.github.com"
+            git add data/notified.json
+            git commit -m "chore: update leave reminder latch [skip ci]"
+            git push
+          else
+            echo "No state change; nothing to commit."
+          fi
