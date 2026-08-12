@@ -10,7 +10,7 @@ GITHUB_BRANCH = "main"
 LEAVES_PATH = "data/leaves.yaml"
 
 [observability.logs]
-enabled = false
+enabled = true
 invocation_logs = true
 
 # Secrets (set via `wrangler secret put <NAME>`, never committed):
