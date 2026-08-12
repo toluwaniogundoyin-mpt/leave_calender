@@ -9,6 +9,10 @@ GITHUB_REPO = "leave-calender"
 GITHUB_BRANCH = "main"
 LEAVES_PATH = "data/leaves.yaml"
 
+[observability.logs]
+enabled = false
+invocation_logs = true
+
 # Secrets (set via `wrangler secret put <NAME>`, never committed):
 #   SLACK_SIGNING_SECRET  — from the Slack app's Basic Information page
 #   GITHUB_TOKEN          — fine-grained PAT, Contents: Read/write, scoped to this one repo
