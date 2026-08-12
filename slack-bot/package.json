@@ -1,5 +1,5 @@
 {
-  "name": "leave-notifier-bot",
+  "name": "leave-calender-slack-bots",
   "private": true,
   "scripts": {
     "dev": "wrangler dev",
