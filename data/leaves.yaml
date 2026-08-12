@@ -1,1 +1,11 @@
-
+# Source of truth for leave records.
+# Managed via the /leaves slash command (see slack-bot/) — edit by hand only if needed.
+# Each entry:
+#   id:          short id, assigned on add — used for the notification latch
+#   name:        display name (fallback if slack_user is unset)
+#   slack_user:  "<@U12345678>" mention string, captured from Slack autocomplete
+#   start / end: YYYY-MM-DD, inclusive
+#   note:        free text
+#   added_by:    who ran /leaves add
+#   added_at:    ISO8601 UTC timestamp
+[]
