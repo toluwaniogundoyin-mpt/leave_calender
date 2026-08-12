@@ -162,8 +162,8 @@ async function appendLeaveWithRetry(entry, env, attempt = 0) {
 async function githubRequest(env, method, jsonBody) {
   // Cache-bust: Cloudflare's fetch() can cache subrequests at the edge based on
   // GitHub's response headers, which caused reads right after a write to return
-  // stale (pre-write) content. `cf.cacheTtl: 0` plus a unique query param on GET
-  // ensures every read hits GitHub directly.
+  // stale (pre-write) content. `cache: "no-store"` plus a unique query param on
+  // GET ensures every read hits GitHub directly.
   const url =
     `https://api.github.com/repos/${env.GITHUB_OWNER}/${env.GITHUB_REPO}/contents/${env.LEAVES_PATH}` +
     (method === "GET" ? `?ref=${env.GITHUB_BRANCH}&_=${Date.now()}` : "");
@@ -178,7 +178,6 @@ async function githubRequest(env, method, jsonBody) {
     },
     body: jsonBody ? JSON.stringify(jsonBody) : undefined,
     cache: "no-store",
-    cf: { cacheTtl: 0, cacheEverything: false },
   });
 }
 
