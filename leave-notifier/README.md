@@ -1,7 +1,13 @@
 # leave-notifier
 
 Posts upcoming-leave reminders to a Slack channel, and lets the team add/check
-leave days with a `/leave` slash command — without leaving Slack.
+leave days with a `/leaves` slash command — without leaving Slack.
+(`/leave` is a Slack built-in command that leaves the current channel, so
+this app uses `/leaves` instead.)
+
+`check` shows the whole team's schedule (everyone currently out or starting
+leave in the next 30 days), not just the requester's own leave — it's meant
+as shared team visibility, not a personal lookup.
 
 Two moving pieces:
 
@@ -9,7 +15,7 @@ Two moving pieces:
   posts due reminders to Slack via an Incoming Webhook. Modeled on the
   `coralpay-balance-alert` project's pattern (Slack webhook + git-committed
   JSON latch to avoid duplicate posts).
-- **`slack-bot/`** — a small Cloudflare Worker that handles the `/leave`
+- **`slack-bot/`** — a small Cloudflare Worker that handles the `/leaves`
   slash command (`add`, `check`). It reads/writes `data/leaves.yaml` directly
   via the GitHub Contents API. This piece exists only because Slack requires
   a live HTTP endpoint that responds in under 3 seconds — something GitHub
@@ -31,7 +37,9 @@ At https://api.slack.com/apps → **Create New App** → From scratch, in your w
 
 1. **Incoming Webhooks**: turn on, click "Add New Webhook to Workspace", pick
    the target channel. Copy the webhook URL — this is `SLACK_WEBHOOK_URL`.
-2. **Slash Commands**: create `/leave`.
+2. **Slash Commands**: create `/leaves` (not `/leave` — that's a Slack
+   built-in for leaving a channel). Make sure **Socket Mode** is off for
+   this app first, or the Request URL field won't be available.
    - Request URL: fill in *after* deploying the Worker in step 4 (you can
      save a placeholder now and come back).
    - Short description: `Manage team leave`
@@ -100,8 +108,8 @@ low-activity repos, which is why the existing project avoids it.
 ## Usage
 
 ```
-/leave add @jane 2026-08-20 2026-08-25 Annual leave
-/leave check
+/leaves add @jane 2026-08-20 2026-08-25 Annual leave
+/leaves check
 ```
 
 Reminders are sent automatically:
